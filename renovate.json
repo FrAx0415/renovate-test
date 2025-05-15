@@ -7,6 +7,12 @@
         "updateTypes": ["minor", "patch"],
         "automerge": true
       }
+    ],
+    
+    "managerFilePatterns": [
+        "/(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$/",
+        "/(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$/"
     ]
+      
   }
   
