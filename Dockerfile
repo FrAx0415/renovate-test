@@ -1,4 +1,4 @@
 # Dockerfile
-FROM nginx:1.14.2
+FROM nginx:1.28.0
 
 COPY ./index.html /usr/share/nginx/html/index.html
