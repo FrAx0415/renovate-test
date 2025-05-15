@@ -1,1 +1,1 @@
-from itzg/minecraft-server:1.8_01
+from minio/minio:RELEASE.2024-12-18T13-15-44Z-cpuv1
