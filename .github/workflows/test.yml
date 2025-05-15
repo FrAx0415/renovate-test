@@ -1,0 +1,19 @@
+# .github/workflows/renovate.yml
+name: Renovate
+
+on:
+  push:                   # scatta a ogni push su qualunque branch
+  workflow_dispatch: {}   # bottone “Run workflow” nella UI
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+
+    steps:
+      # basta un solo step: l’action ufficiale di Renovate
+      - name: Self‑hosted Renovate
+        uses: renovatebot/github-action@v41.0.22   # usa qui l’ultima release disponibile
+        with:
+          token: ${{ secrets.RENOVATE_TOKEN }}     # PAT salvato nei secret
+          # opzionale: se hai un file diverso da `renovate.json`
+          # configurationFile: .github/renovate.json
