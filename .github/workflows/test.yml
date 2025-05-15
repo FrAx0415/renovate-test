@@ -2,20 +2,42 @@
 name: Renovate
 
 on:
-  push:                   # scatta a ogni push su qualunque branch
-  workflow_dispatch: {}   # bottone “Run workflow” nella UI
+  push:
+  workflow_dispatch: {}
 
 jobs:
   renovate:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write # Per creare PR
+      pull-requests: write # Per creare PR
+      
     steps:
-      # basta un solo step: l’action ufficiale di Renovate
-      - name: Self‑hosted Renovate
-        uses: renovatebot/github-action@v41.0.22   # usa qui l’ultima release disponibile
+      # Configura le credenziali AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-central-1
+          # Per progetti ospitati su GitHub:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          # Oppure utilizzare access key direttamente (meno sicuro):
+          # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      # Ottieni token di autenticazione ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: true
+      
+      # Esegui Renovate con variabili d'ambiente per ECR
+      - name: Self-hosted Renovate
+        uses: renovatebot/github-action@v41.0.22
         env:
           RENOVATE_REPOSITORIES: ${{ github.repository }}
+          # Passa le credenziali ECR a Renovate tramite variabili d'ambiente
+          DOCKER_PASSWORD: ${{ steps.login-ecr.outputs.docker-password }}
+          DOCKER_USERNAME: AWS
         with:
-          token: ${{ secrets.RENOVATE_TOKEN }}     # PAT salvato nei secret
-          # opzionale: se hai un file diverso da `renovate.json`
-          # configurationFile: .github/renovate.json
+          token: ${{ secrets.RENOVATE_TOKEN }}
