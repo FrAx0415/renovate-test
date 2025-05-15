@@ -1,0 +1,12 @@
+{
+    "extends": ["config:base"],
+    "packageRules": [
+      {
+        "matchDatasources": ["docker"],
+        "matchManagers": ["dockerfile"],
+        "updateTypes": ["minor", "patch"],
+        "automerge": true
+      }
+    ]
+  }
+  
