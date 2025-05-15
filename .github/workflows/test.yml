@@ -13,6 +13,8 @@ jobs:
       # basta un solo step: l’action ufficiale di Renovate
       - name: Self‑hosted Renovate
         uses: renovatebot/github-action@v41.0.22   # usa qui l’ultima release disponibile
+        env:
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}     # PAT salvato nei secret
           # opzionale: se hai un file diverso da `renovate.json`
